@@ -1,0 +1,76 @@
+=== VULNÉRABILITÉS — InsecureBankv2 ===
+Score MobSF : 28/100
+
+--- CRITIQUES ---
+
+1. Debug activé en production
+   Localisation : AndroidManifest.xml → android:debuggable=true
+   Impact : Permet hooking, dump mémoire, reverse engineering
+   MASVS : MASVS-RESILIENCE-2
+
+2. Secrets hardcodés
+   Localisation : Strings dans les ressources APK
+   Preuves :
+     - "This is the super secret key 123"
+     - "superSecurePassword"
+     - 23 secrets cryptographiques détectés
+   Impact : Compromission totale des accès
+   MASVS : MASVS-STORAGE-2
+
+3. Vulnérabilité Janus (CVE-2017-13156)
+   Localisation : Signature APK (v1 uniquement)
+   Impact : Injection de code malveillant sur Android 5-8
+   MASVS : MASVS-CODE-2
+
+4. StrandHogg 2.0 sur 3 activités
+   Localisation :
+     - com.android.insecurebankv2.PostLogin
+     - com.android.insecurebankv2.DoTransfer
+     - com.android.insecurebankv2.ViewStatement
+   Impact : Phishing par hijacking de tâche Android
+   MASVS : MASVS-PLATFORM-1
+
+--- ÉLEVÉES ---
+
+5. Composants exportés sans protection
+   Localisation : AndroidManifest.xml
+   Composants exposés :
+     - PostLogin (Activity) → exported=true
+     - DoTransfer (Activity) → exported=true
+     - ViewStatement (Activity) → exported=true
+     - TrackUserContentProvider (Provider) → exported=true
+     - MyBroadCastReceiver (Receiver) → exported=true
+   Impact : Accès non autorisé aux fonctions bancaires
+   MASVS : MASVS-PLATFORM-1
+
+6. Sauvegarde ADB non restreinte
+   Localisation : AndroidManifest.xml → android:allowBackup=true
+   Impact : Extraction des données via "adb backup"
+   MASVS : MASVS-STORAGE-1
+
+7. SDK minimum trop bas (API 15 = Android 4.0)
+   Localisation : AndroidManifest.xml → minSdk=15
+   Impact : Installation sur appareils non patchés
+   MASVS : MASVS-CODE-1
+
+--- MOYENNES ---
+
+8. Permissions dangereuses excessives (7 permissions)
+   Impact : Surface d'attaque élargie
+   MASVS : MASVS-PLATFORM-3
+
+9. Trackers publicitaires détectés (3)
+   Détails : Google AdMob, Google Analytics, Google Tag Manager
+   Impact : Collecte de données utilisateur
+
+--- FAUX POSITIFS POTENTIELS ---
+
+1. Clés cryptographiques Base64 dans les strings
+   Raison : Peuvent appartenir aux SDK Google intégrés
+   (Google Play Services, AdMob) et non au code applicatif
+
+=== RÉSUMÉ PAR SÉVÉRITÉ ===
+Critique : 4
+Élevée   : 3
+Moyenne  : 2
+Faible   : 0

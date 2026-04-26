@@ -1,0 +1,87 @@
+=== CORRÉLATION OWASP MASVS — InsecureBankv2 ===
+
+--- Vulnérabilité 1 ---
+Titre : Secrets hardcodés dans le code
+Référence MASVS : MASVS-STORAGE-2
+Description : L'application ne doit pas stocker de données
+sensibles en clair dans le code source ou les ressources.
+Preuve : Strings "This is the super secret key 123",
+"superSecurePassword" détectés par MobSF dans les ressources
+Impact : Un attaquant ayant accès à l'APK peut extraire
+les credentials sans exécuter l'application
+Statut : NON CONFORME
+
+--- Vulnérabilité 2 ---
+Titre : Débogage activé en production
+Référence MASVS : MASVS-RESILIENCE-2
+Description : L'application ne doit pas être déboggable
+en production.
+Preuve : android:debuggable=true dans AndroidManifest.xml
+Impact : Permet d'attacher un débogueur, dumper la mémoire,
+intercepter les appels de fonctions via Frida/JDWP
+Statut : NON CONFORME
+
+--- Vulnérabilité 3 ---
+Titre : Composants Android exportés sans protection
+Référence MASVS : MASVS-PLATFORM-1
+Description : L'application doit restreindre l'accès aux
+composants Android aux applications légitimes uniquement.
+Preuve : Activities PostLogin, DoTransfer, ViewStatement
+avec android:exported=true sans permission requise
+Impact : N'importe quelle app peut lancer ces activités
+sensibles (transfert d'argent, relevés bancaires)
+Statut : NON CONFORME
+
+--- Vulnérabilité 4 ---
+Titre : Signature APK vulnérable (Janus)
+Référence MASVS : MASVS-CODE-2
+Description : L'application doit être signée avec un schéma
+de signature récent (v2 ou v3).
+Preuve : v1 signature=True, v2=False, v3=False, v4=False
+Impact : Vulnérabilité Janus (CVE-2017-13156) permet
+d'injecter du code malveillant sur Android 5.0-8.0
+Statut : NON CONFORME
+
+--- Vulnérabilité 5 ---
+Titre : Sauvegarde ADB non restreinte
+Référence MASVS : MASVS-STORAGE-1
+Description : Les données sensibles ne doivent pas être
+accessibles via les mécanismes de sauvegarde Android.
+Preuve : android:allowBackup=true dans AndroidManifest.xml
+Impact : Extraction complète des données de l'app via
+"adb backup" sans root
+Statut : NON CONFORME
+
+--- Vulnérabilité 6 ---
+Titre : Permissions dangereuses excessives
+Référence MASVS : MASVS-PLATFORM-3
+Description : L'application doit demander uniquement les
+permissions strictement nécessaires.
+Preuve : 7 permissions dangereuses dont SEND_SMS,
+READ_CONTACTS non justifiées pour une app bancaire
+Impact : Surface d'attaque élargie, risque de malware
+utilisant ces permissions
+Statut : NON CONFORME
+
+=== TESTS MASTG COMPLÉMENTAIRES ===
+
+Test 1 : MASTG-TEST-0001 - Testing Local Storage for Sensitive Data
+Objectif : Vérifier si des données sensibles (credentials,
+tokens) sont stockées en clair dans SharedPreferences,
+SQLite, ou fichiers internes
+Pertinence : Complète l'analyse des secrets hardcodés
+
+Test 2 : MASTG-TEST-0030 - Testing for Debugging Code
+Objectif : Vérifier la présence de logs de débogage,
+backdoors et code de test en production
+Pertinence : Complète l'analyse debuggable=true
+
+=== RÉSUMÉ CONFORMITÉ ===
+MASVS-STORAGE-1 : NON CONFORME
+MASVS-STORAGE-2 : NON CONFORME
+MASVS-PLATFORM-1 : NON CONFORME
+MASVS-PLATFORM-3 : NON CONFORME
+MASVS-CODE-2     : NON CONFORME
+MASVS-RESILIENCE-2 : NON CONFORME
+
+Score de conformité estimé : 0/6 contrôles vérifiés

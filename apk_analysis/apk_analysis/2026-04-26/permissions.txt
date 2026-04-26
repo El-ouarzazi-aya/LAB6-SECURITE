@@ -1,0 +1,49 @@
+=== PERMISSIONS DANGEREUSES — InsecureBankv2 ===
+
+1. android.permission.ACCESS_COARSE_LOCATION
+   Risque : Accès à la localisation approximative
+   Justification : Non nécessaire pour une app bancaire
+   Niveau : DANGEROUS
+
+2. android.permission.GET_ACCOUNTS
+   Risque : Accès à la liste des comptes du téléphone
+   Justification : Peut exposer les comptes Gmail/Google
+   Niveau : DANGEROUS
+
+3. android.permission.READ_CONTACTS
+   Risque : Lecture de tous les contacts
+   Justification : Aucune raison légitime pour une banque
+   Niveau : DANGEROUS
+
+4. android.permission.READ_PROFILE
+   Risque : Lecture du profil personnel de l'utilisateur
+   Justification : Non nécessaire
+   Niveau : DANGEROUS
+
+5. android.permission.SEND_SMS
+   Risque : Envoi de SMS sans confirmation utilisateur
+   Justification : Peut générer des coûts, risque de malware
+   Niveau : DANGEROUS
+
+6. android.permission.USE_CREDENTIALS
+   Risque : Utilisation des tokens d'authentification
+   Justification : Accès aux credentials d'autres apps
+   Niveau : DANGEROUS
+
+7. android.permission.WRITE_EXTERNAL_STORAGE
+   Risque : Écriture sur le stockage externe
+   Justification : Peut exposer des données sensibles
+   Niveau : DANGEROUS
+
+=== PERMISSIONS NORMALES ===
+
+1. android.permission.INTERNET
+   Niveau : NORMAL — Accès réseau (justifié)
+
+2. android.permission.ACCESS_NETWORK_STATE
+   Niveau : NORMAL — Vérification connectivité (justifié)
+
+=== RÉSUMÉ ===
+Permissions dangereuses : 7/9
+Permissions normales    : 2/9
+Abus potentiel malware  : 7/25 permissions connues malware

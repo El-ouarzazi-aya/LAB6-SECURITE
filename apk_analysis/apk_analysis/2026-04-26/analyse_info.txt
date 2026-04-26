@@ -1,0 +1,7 @@
+
+Date d'analyse : Sun 26 Apr 2026 02:23:29 PM EDT
+Analyste : El Ouarzazi Aya
+VM Mobexler version : Version non disponible
+APK analysé : app-debug.apk
+b18af2a0e44d7634bbcdf93664d9c78a2695e050393fcfbb5e8b91f902d194a4  app-debug.apk
+MobSF version : v4.5.0
